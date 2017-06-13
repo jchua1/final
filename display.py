@@ -9,7 +9,7 @@ RED = 0
 GREEN = 1
 BLUE = 2
 
-DEFAULT_COLOR = [255, 255, 255]
+DEFAULT_COLOR = [0, 0, 0]
 
 def new_screen( width = XRES, height = YRES ):
     screen = []
@@ -30,7 +30,9 @@ def new_zbuffer( width = XRES, height = YRES ):
 def plot( screen, zbuffer, color, x, y, z):
     newy = YRES - 1 - y
     if ( x >= 0 and x < XRES and newy >= 0 and newy < YRES ):
-        screen[newy][x] = color[:]
+        if z >= zbuffer[newy][x]:
+            zbuffer[newy][x] = z
+            screen[newy][x] = color[:]
 
 def clear_screen( screen ):
     for y in range( len(screen) ):
@@ -77,5 +79,3 @@ def make_animation( name ):
     f = fork()
     if f == 0:
         execlp('convert', 'convert', '-delay', '3', name_arg, name)
-    
-    
